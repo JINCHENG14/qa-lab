@@ -1,0 +1,28 @@
+# 虚拟环境
+.venv/
+venv/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# 测试产物
+.pytest_cache/
+.coverage
+htmlcov/
+reports/
+allure-results/
+
+# 本地配置与日志
+.env
+*.log
+
+# 编辑器（保留团队配置）
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# 系统
+.DS_Store
+Thumbs.db
