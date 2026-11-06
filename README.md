@@ -18,18 +18,22 @@ AI 测试工程师学习计划的练习仓库。所有学习产出都往这里�
 # 1. 进入项目
 cd D:\学习\qa-lab
 
-# 2. 激活虚拟环境（Windows）
-.venv\Scripts\activate
-
-# 3. 跑环境自检
+# 2. 跑环境自检（脚本会自动切到 .venv，不用先激活）
 python week01\d1_check_env.py
 ```
 
+第一次会看到「当前不是项目虚拟环境，自动切换后重跑」，这是正常的，之后就是 6/6。
+
 VS Code 里直接 `code .` 打开本目录，右下角解释器选 `.venv` 那个（已经预配置好了）。
 
-**不激活也能跑**：直接用虚拟环境里的解释器，效果一样，还少一步：
+### 另外两种跑法（等价）
 
 ```bash
+# 先激活，提示符前会出现 (.venv)
+.venv\Scripts\activate
+python week01\d1_check_env.py
+
+# 或者直接用虚拟环境的解释器，一步到位
 .venv\Scripts\python.exe week01\d1_check_env.py
 ```
 
@@ -37,9 +41,11 @@ VS Code 里直接 `code .` 打开本目录，右下角解释器选 `.venv` 那�
 
 | 现象 | 原因 | 解决 |
 |---|---|---|
-| `无法加载文件 Activate.ps1，因为在此系统上禁止运行脚本` | PowerShell 默认策略是 Restricted | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`（只需一次，不需要管理员） |
-| 自检报 `[FAIL] 虚拟环境 未激活 .venv` | 用的是系统 Python | 按上面两种方式之一，改用 `.venv` 里的解释器 |
+| `无法加载文件 Activate.ps1，因为在此系统上禁止运行脚本` | PowerShell 默认策略是 Restricted | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`（只需一次，不需要管理员），然后**关掉终端重开** |
+| 自检报 `[FAIL] 虚拟环境 未激活 .venv` | 用 `python` 跑到系统 Python 上，且脚本的自动切换被 `QA_NO_RELAUNCH` 关掉了 | 去掉该环境变量，或用上面两种显式指定 `.venv` 的跑法 |
+| `无法将 ...python.exe 项识别为 cmdlet` | PowerShell 里漏了 `.\` 前缀 | 写成 `.\.venv\Scripts\python.exe ...` |
 | `python: command not found` | 新装的 Python 还没进当前终端 | 关掉终端重开一个 |
+
 
 
 ## 目录约定

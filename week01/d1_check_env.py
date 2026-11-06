@@ -1,15 +1,17 @@
 """Day 1 环境自检。
 
-用法（二选一）：
-    .venv\\Scripts\\activate
-    python week01\\d1_check_env.py
-
-    # 或者不激活，直接用虚拟环境里的解释器
+用法（任选一种，效果一样）：
+    python week01\\d1_check_env.py              # 脚本会自己切到 .venv 重跑
+    .venv\\Scripts\\activate 后 python week01\\d1_check_env.py
     .venv\\Scripts\\python.exe week01\\d1_check_env.py
+
+如果不想让脚本自动切换（比如你就是想检查系统的 Python），
+先设环境变量 QA_NO_RELAUNCH=1 再运行。
 
 全部显示 [ OK ] 就说明环境搭好了，可以开始第 2 天的学习。
 """
 
+import os
 import platform
 import subprocess
 import sys
@@ -19,6 +21,34 @@ GIT_CANDIDATES = [
     r"C:\Program Files\Git\cmd\git.exe",
     "git",
 ]
+
+
+def venv_python() -> Path | None:
+    """找到项目里的 .venv 解释器，找不到就返回 None。"""
+    root = Path(__file__).resolve().parent.parent
+    for rel in (r".venv\Scripts\python.exe", ".venv/bin/python"):
+        candidate = root / rel
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def ensure_venv() -> None:
+    """不在 .venv 里就自动用它重跑一遍，省得用户记激活命令。"""
+    if sys.prefix != sys.base_prefix:  # 已经在虚拟环境里
+        return
+    if os.environ.get("QA_NO_RELAUNCH") == "1":
+        return
+    py = venv_python()
+    if py is None:  # 没有 .venv，就按原样继续，让检查项去报错
+        return
+
+    print("当前不是项目虚拟环境，自动切换后重跑：", flush=True)
+    print(f"  现在  {sys.executable}", flush=True)
+    print(f"  切换  {py}", flush=True)
+    print(flush=True)
+    env = dict(os.environ, QA_NO_RELAUNCH="1")
+    sys.exit(subprocess.call([str(py), str(Path(__file__).resolve())], env=env))
 
 
 def run(cmd: list[str]) -> str:
@@ -101,4 +131,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    ensure_venv()
     raise SystemExit(main())
