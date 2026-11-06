@@ -1,8 +1,11 @@
 """Day 1 环境自检。
 
-用法：
+用法（二选一）：
     .venv\\Scripts\\activate
-    python day1\\check_env.py
+    python week01\\d1_check_env.py
+
+    # 或者不激活，直接用虚拟环境里的解释器
+    .venv\\Scripts\\python.exe week01\\d1_check_env.py
 
 全部显示 [ OK ] 就说明环境搭好了，可以开始第 2 天的学习。
 """
@@ -13,8 +16,8 @@ import sys
 from pathlib import Path
 
 GIT_CANDIDATES = [
-    "git",
     r"C:\Program Files\Git\cmd\git.exe",
+    "git",
 ]
 
 
@@ -51,6 +54,16 @@ def main() -> int:
     # 2. 是否跑在虚拟环境里（这是最容易漏掉的一步）
     in_venv = sys.prefix != sys.base_prefix
     results.append(check("虚拟环境", in_venv, sys.prefix if in_venv else "未激活 .venv"))
+
+    if not in_venv:
+        print()
+        print("  当前用的是系统 Python，不是项目里的 .venv：")
+        print(f"    {sys.executable}")
+        print("  这样跑，依赖和项目环境对不上。两种改法，随便选一种：")
+        print(r"    .venv\Scripts\python.exe week01\d1_check_env.py   # 直接用虚拟环境的解释器")
+        print(r"    .venv\Scripts\activate                            # 或者先激活，再 python ...")
+        print("  如果 PowerShell 报「因为在此系统上禁止运行脚本」，先执行一次：")
+        print(r"    Set-ExecutionPolicy -Scope CurrentUser RemoteSigned")
 
     # 3. 第三方包
     for pkg in ("requests", "pytest"):

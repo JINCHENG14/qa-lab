@@ -27,6 +27,21 @@ python week01\d1_check_env.py
 
 VS Code 里直接 `code .` 打开本目录，右下角解释器选 `.venv` 那个（已经预配置好了）。
 
+**不激活也能跑**：直接用虚拟环境里的解释器，效果一样，还少一步：
+
+```bash
+.venv\Scripts\python.exe week01\d1_check_env.py
+```
+
+### 常见报错
+
+| 现象 | 原因 | 解决 |
+|---|---|---|
+| `无法加载文件 Activate.ps1，因为在此系统上禁止运行脚本` | PowerShell 默认策略是 Restricted | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`（只需一次，不需要管理员） |
+| 自检报 `[FAIL] 虚拟环境 未激活 .venv` | 用的是系统 Python | 按上面两种方式之一，改用 `.venv` 里的解释器 |
+| `python: command not found` | 新装的 Python 还没进当前终端 | 关掉终端重开一个 |
+
+
 ## 目录约定
 
 ```
